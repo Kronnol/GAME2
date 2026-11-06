@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#070b16">
+  <meta name="description" content="PULSE ARENA: conquista una arena de energía, encadena combos y compite contra tus amigos en tiempo real.">
+  <title>PULSE ARENA — El caos tiene un ganador</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <canvas id="arena" aria-label="Arena de juego interactiva"></canvas>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <main id="menu" class="menu-screen">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Pulse Arena, inicio">
+        <span class="brand-symbol">✦</span><span>PULSE<span class="brand-light">.ARENA</span></span>
+      </a>
+      <div class="header-right"><span class="status-dot"></span> MULTIJUGADOR EN TIEMPO REAL <span class="header-tag">V 1.0</span></div>
+    </header>
+
+    <section class="landing">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="eyebrow-line"></span> COMPITE · SOBREVIVE · DOMINA</div>
+        <h1>EL CAOS<br><span class="gradient-text">TIENE UN</span><br><span class="outline-text">GANADOR<span class="period">.</span></span></h1>
+        <p class="hero-description">Una arena. Una cuenta regresiva. Infinitas oportunidades de arrebatarle el primer lugar a todos. <strong>Recoge energía, encadena combos y lanza pulsos devastadores.</strong></p>
+        <div class="mode-tags"><span><i class="tiny-star">✦</i> 105 SEGUNDOS</span><span><i class="tiny-star">◎</i> HASTA 12 JUGADORES</span><span><i class="tiny-star">⌁</i> 5 RIVALES IA</span></div>
+
+        <div class="launch-panel">
+          <div class="launch-heading"><span>01 // PREPARA TU ENTRADA</span><span class="launch-decoration">● ● ●</span></div>
+          <div class="inputs-row">
+            <label for="nameInput">TU NOMBRE <input id="nameInput" type="text" maxlength="16" placeholder="Escribe tu apodo" autocomplete="nickname" spellcheck="false"></label>
+            <label for="roomInput">CÓDIGO DE SALA <input id="roomInput" type="text" maxlength="9" placeholder="PUBLIC" autocomplete="off" spellcheck="false"></label>
+          </div>
+          <div class="launch-actions">
+            <button id="playBtn" class="btn-primary"><span>ENTRAR A LA ARENA</span><span class="btn-arrow">↗</span></button>
+            <button id="createBtn" class="btn-secondary" title="Crea una sala con código único">CREAR SALA PRIVADA <span>＋</span></button>
+          </div>
+          <p id="connectStatus" class="connect-status">Sin descargas. Abre el juego y empieza a competir.</p>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="art-corner top-left">01 / THE ARENA</div>
+        <div class="art-corner top-right">SYSTEM ONLINE <span class="blink">●</span></div>
+        <div class="radar-ring ring-a"></div><div class="radar-ring ring-b"></div><div class="radar-ring ring-c"></div>
+        <div class="radar-cross cross-h"></div><div class="radar-cross cross-v"></div>
+        <div class="art-orb orb-a"></div><div class="art-orb orb-b"></div><div class="art-orb orb-c"></div><div class="art-orb orb-d"></div>
+        <div class="power-core"><div class="core-back"></div><div class="core-body"><div class="core-eye"></div></div><div class="core-glint"></div></div>
+        <div class="art-scanline"></div>
+        <div class="art-stat"><span>ENERGY LEVEL</span><strong>100<span>%</span></strong><div class="stat-meter"><i></i></div></div>
+        <div class="art-bottom"><span>NO MERCY. JUST POINTS.</span><span>✦</span></div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="controls-preview"><span class="footer-label">CONTROLES</span> <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> MOVER <span class="f-sep">/</span> <kbd>ESPACIO</kbd> PULSO <span class="f-sep">/</span> <kbd>SHIFT</kbd> DASH</div>
+      <div class="footer-note">HECHO PARA GANAR. DISEÑADO PARA REPETIR.</div>
+    </footer>
+  </main>
+
+  <div id="hud" class="hud" hidden>
+    <div class="hud-top">
+      <div class="hud-brand"><span class="brand-symbol">✦</span><div><strong>PULSE<span>.ARENA</span></strong><small id="roomLabel">SALA PUBLIC</small></div></div>
+      <div class="clock-panel"><span id="roundLabel" class="round-label">ROUND 01 · EN CURSO</span><div class="clock-row"><span class="clock-mark">◷</span><span id="timeLabel" class="clock-time">1:45</span></div><div class="clock-progress"><div id="clockBar"></div></div></div>
+      <div class="hud-top-right"><span id="humanCount" class="human-count"><i class="status-dot"></i> 1 JUGADOR REAL</span><button id="soundBtn" class="icon-btn" title="Activar o silenciar efectos de sonido" aria-label="Activar o silenciar sonido">♫</button><button id="shareBtn" class="icon-btn share-btn" title="Compartir sala">↗</button><button id="exitBtn" class="exit-btn">SALIR ×</button></div>
+    </div>
+
+    <aside class="leaderboard-panel"><div class="panel-heading"><span>✦ CLASIFICACIÓN</span><span class="live-tag">● EN VIVO</span></div><div id="leaderRows" class="leader-rows"></div><div class="leader-foot">EL PRIMERO SE LO LLEVA TODO</div></aside>
+    <div id="eventFeed" class="event-feed" aria-live="off"></div>
+    <div id="centerAnnouncement" class="center-announcement"></div>
+    <div class="hud-bottom">
+      <div class="personal-score"><div class="score-label">TU PUNTUACIÓN <span id="myRank"># —</span></div><div id="scoreNumber" class="score-number">0</div><div id="comboDisplay" class="combo-display">RECOGE ENERGÍA PARA HACER COMBO</div></div>
+      <div class="ability-wrap"><div class="ability" id="pulseAbility"><button id="pulseBtn" class="ability-button pulse-button" aria-label="Usar pulso"><span class="ability-symbol">✹</span><span class="cooldown" id="pulseCooldown"></span></button><span class="ability-title">PULSO <kbd>ESPACIO</kbd></span></div><div class="ability" id="dashAbility"><button id="dashBtn" class="ability-button dash-button" aria-label="Usar impulso"><span class="ability-symbol">➤</span><span class="cooldown" id="dashCooldown"></span></button><span class="ability-title">DASH <kbd>SHIFT</kbd></span></div></div>
+    </div>
+    <div class="in-game-help">WASD PARA MOVERTE <span>•</span> ESPACIO O CLICK PARA ROBAR ENERGÍA <span>•</span> SHIFT PARA IMPULSARTE</div>
+    <div id="mobileControls" class="mobile-controls"><div id="joystick" class="joystick"><div id="joystickKnob" class="joystick-knob"></div></div></div>
+  </div>
+
+  <div id="results" class="results-screen" hidden>
+    <div class="results-card"><div class="results-kicker">◈ FIN DE LA RONDA</div><h2 id="resultsTitle">RESULTADOS</h2><p id="resultsSubtitle">Así quedó la arena.</p><div id="resultsList" class="results-list"></div><div class="results-footer"><div><small>TUS PUNTOS</small><strong id="finalScore">0</strong></div><div><small>TU POSICIÓN</small><strong id="finalRank"># —</strong></div><div class="next-round"><small>PRÓXIMA RONDA EN</small><strong id="nextCountdown">11</strong></div></div><div class="records-section"><div class="records-heading"><span>🏆 TOP HISTÓRICO DEL SERVIDOR</span><span>SOLO PERSONAS</span></div><div id="allTimeRecords" class="records-list"></div></div><p class="results-note">Los récords se guardan en el servidor. Sin cuenta, los apodos no están verificados.</p></div>
+  </div>
+
+  <script src="/game.js" defer></script>
+</body>
+</html>

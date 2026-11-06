@@ -1,0 +1,13 @@
+{
+  "name": "pulse-arena-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Competitive real-time neon arena browser game; zero dependencies",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
